@@ -1,5 +1,4 @@
-# profAI-projects
-
+# Python project
 Software di un negozio di prodotti vegani
 
 Questo progetto consiste nel realizzare un software per la gestione di un negozio di prodotti vegani. Il software deve avere le seguenti funzionalità:
