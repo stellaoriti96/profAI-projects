@@ -1,4 +1,4 @@
-Previsione di opportunità di Cross Sell di assicurazioni
+# Machine Learning Fundamentals project - Previsione di opportunità di Cross Sell di assicurazioni
 Il cliente è una compagnia di assicurazioni che ha fornito un'assicurazione sanitaria ai suoi clienti, adesso hanno bisogno del tuo aiuto per costruire un modello predittivo in grado di prevedere se gli assicurati dell'anno passato potrebbero essere interessati ad acquistare anche un'assicurazione per il proprio veicolo.
 
 Il dataset è composto dalle seguenti proprietà:
