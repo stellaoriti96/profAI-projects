@@ -1,5 +1,4 @@
-# Python project
-Software di un negozio di prodotti vegani
+# Python project - Software di un negozio di prodotti vegani
 
 Questo progetto consiste nel realizzare un software per la gestione di un negozio di prodotti vegani. Il software deve avere le seguenti funzionalità:
 Registrare nuovi prodotti, con nome, quantità, prezzo di vendita e prezzo di acquisto.
