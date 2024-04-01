@@ -18,7 +18,7 @@ Durante un acquisto, verifica che i prodotti acquistati siano effettivamente pre
 Durante l'aggiunta in magazzino, verifica se il prodotto da aggiungere è già presente magazzino, nel caso positivo aggiungi la quantità a quella già presente in magazzino, in questo caso non serve specificare di nuovo il prezzo di acquisto e di vendita, altrimenti registralo come un nuovo prodotto.
 Il profitto lordo è il totale delle vendite, cioè tutto ciò che i clienti hanno pagato, il profitto netto invece è pari al profitto lordo meno il costo di acquisto per i prodotti.
 
-## ESEMPIO DI INTERAZIONE CON IL PROGRAMMA (in grassetto l'input dell'utente)
+## ESEMPIO DI INTERAZIONE CON IL PROGRAMMA
 
 Inserisci un comando: aiuto
 I comandi disponibili sono i seguenti:
