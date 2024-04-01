@@ -19,7 +19,8 @@ Response: 1 se l'acquirente ha risposto positivamente alla proposta di vendita, 
 
 L'obiettivo del modello è prevedere il valore di Response.
 
-Tip Fai attenzione alla distribuzione delle classi, dai uno sguardo a questo approfondimento. In caso di classi sbilanciate puoi provare a:
+## TIP
+Fai attenzione alla distribuzione delle classi, dai uno sguardo a questo approfondimento. In caso di classi sbilanciate puoi provare a:
 
 Penalizzare la classe più frequente (ricorda l'argomento class_weight)
 Utilizzare l'oversampling o l'undersampling.
