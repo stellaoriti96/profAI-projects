@@ -2,7 +2,6 @@ select -- numero di clienti
 count(distinct id_cliente)
 from banca.cliente;
 
-
 select *
 from banca.cliente;
 
@@ -18,7 +17,10 @@ from banca.tipo_transazione;
 select *
 from banca.transazioni;
 
+
 -- CALCOLO DELL'ETA'
+drop temporary table if exists banca.tabella_eta;
+
 create temporary table banca.tabella_eta as 
 select
 id_cliente,
@@ -26,8 +28,8 @@ data_nascita,
 timestampdiff(year, date(data_nascita), current_date()) as eta
 from banca.cliente;
 
-
 select * from banca.tabella_eta;
+
 
 -- NUMERO DI TRANSAZIONI IN USCITA (SEGNO -)
 select -- tutte le transazioni non conteggiate
@@ -60,6 +62,8 @@ banca.tipo_transazione as tipo_transazione
 on transazioni.id_tipo_trans=tipo_transazione.id_tipo_transazione
 group by id_cliente;
 
+drop temporary table if exists banca.num_transazioni_uscita;
+
 create temporary table banca.num_transazioni_uscita as
 select -- transazioni in uscita conteggiate
 cliente.id_cliente,
@@ -79,7 +83,10 @@ group by id_cliente;
 
 select * from banca.num_transazioni_uscita;
 
+
 -- NUMERO DI TRANSAZIONI IN INGRESSO (SEGNO +)
+drop temporary table if exists banca.num_transazioni_entrata;
+
 create temporary table banca.num_transazioni_entrata as
 select -- transazioni in entrata conteggiate
 cliente.id_cliente,
@@ -101,6 +108,8 @@ select * from banca.num_transazioni_entrata;
 
 
 -- IMPORTO TRANSATO IN USCITA SU TUTTI I CONTI (IMPORTO < 0)
+drop temporary table if exists banca.importo_transazioni_uscita;
+
 create temporary table banca.importo_transazioni_uscita as
 select 
 cliente.id_cliente,
@@ -117,7 +126,10 @@ group by id_cliente;
 
 select * from banca.importo_transazioni_uscita;
 
+
 -- IMPORTO TRANSATO IN ENTRATA SU TUTTI I CONTI (IMPORTO > 0)
+drop temporary table if exists banca.importo_transazioni_entrata;
+
 create temporary table banca.importo_transazioni_entrata as
 select 
 cliente.id_cliente,
@@ -134,7 +146,10 @@ group by id_cliente;
 
 select * from banca.importo_transazioni_entrata;
 
+
 -- NUMERO TOTALE DI CONTI POSSEDUTI
+drop temporary table if exists banca.numero_conti;
+
 create temporary table banca.numero_conti as
 select
 cliente.id_cliente,
@@ -148,6 +163,7 @@ group by id_cliente;
 
 select * from banca.numero_conti;
 
+
 -- NUMERO DI CONTI POSSEDUTI PER TIPOLOGIA (UN INDICATORE PER TIPO)
 select
 *
@@ -159,6 +175,8 @@ on cliente.id_cliente=conto.id_cliente
 left join
 banca.tipo_conto as tipo_conto
 on conto.id_tipo_conto=tipo_conto.id_tipo_conto;
+
+drop temporary table if exists banca.numero_conti_tipo;
 
 create temporary table banca.numero_conti_tipo as
 select
@@ -179,14 +197,21 @@ group by id_cliente;
 
 select * from banca.numero_conti_tipo;
 
+
 -- NUMERO DI TRANSAZIONI IN USCITA (IMPORTO < 0) PER TIPOLOGIA (UN INDICATORE PER TIPO)
+drop temporary table if exists banca.num_transazioni_uscita_tipo;
+
 create temporary table banca.num_transazioni_uscita_tipo as
 select
 cliente.id_cliente,
-count(case when tipo_conto.desc_tipo_conto = "Conto Privati" and transazioni.importo < 0 then conto.id_cliente end) as num_trans_usc_conto_privati,
-count(case when tipo_conto.desc_tipo_conto = "Conto Base" and transazioni.importo < 0 then conto.id_cliente end) as num_trans_usc_conto_base,
-count(case when tipo_conto.desc_tipo_conto = "Conto Business" and transazioni.importo < 0 then conto.id_cliente end) as num_trans_usc_conto_business,
-count(case when tipo_conto.desc_tipo_conto = "Conto Famiglie" and transazioni.importo < 0 then conto.id_cliente end) as num_trans_usc_conto_famiglie
+count(case when transazioni.id_tipo_trans = 0 and transazioni.importo < 0 then conto.id_cliente end) as num_trans_usc_stipendio,
+count(case when transazioni.id_tipo_trans = 1 and transazioni.importo < 0 then conto.id_cliente end) as num_trans_usc_pensione,
+count(case when transazioni.id_tipo_trans = 2 and transazioni.importo < 0 then conto.id_cliente end) as num_trans_usc_dividendi,
+count(case when transazioni.id_tipo_trans = 3 and transazioni.importo < 0 then conto.id_cliente end) as num_trans_usc_amazon,
+count(case when transazioni.id_tipo_trans = 4 and transazioni.importo < 0 then conto.id_cliente end) as num_trans_usc_mutuo,
+count(case when transazioni.id_tipo_trans = 5 and transazioni.importo < 0 then conto.id_cliente end) as num_trans_usc_hotel,
+count(case when transazioni.id_tipo_trans = 6 and transazioni.importo < 0 then conto.id_cliente end) as num_trans_usc_voli,
+count(case when transazioni.id_tipo_trans = 7 and transazioni.importo < 0 then conto.id_cliente end) as num_trans_usc_supermercato
 from 
 banca.cliente as cliente
 left join
@@ -202,14 +227,21 @@ group by id_cliente;
 
 select * from banca.num_transazioni_uscita_tipo;
 
+
 -- NUMERO DI TRANSAZIONI IN ENTRATA (IMPORTO > 0) PER TIPOLOGIA (UN INDICATORE PER TIPO)
+drop temporary table if exists banca.num_transazioni_entrata_tipo;
+
 create temporary table banca.num_transazioni_entrata_tipo as
 select
 cliente.id_cliente,
-count(case when tipo_conto.desc_tipo_conto = "Conto Privati" and transazioni.importo > 0 then conto.id_cliente end) as num_trans_entr_conto_privati,
-count(case when tipo_conto.desc_tipo_conto = "Conto Base" and transazioni.importo > 0 then conto.id_cliente end) as num_trans_entr_conto_base,
-count(case when tipo_conto.desc_tipo_conto = "Conto Business" and transazioni.importo > 0 then conto.id_cliente end) as num_trans_entr_conto_business,
-count(case when tipo_conto.desc_tipo_conto = "Conto Famiglie" and transazioni.importo > 0 then conto.id_cliente end) as num_trans_entr_conto_famiglie
+count(case when transazioni.id_tipo_trans = 0 and transazioni.importo > 0 then conto.id_cliente end) as num_trans_entr_stipendio,
+count(case when transazioni.id_tipo_trans = 1 and transazioni.importo > 0 then conto.id_cliente end) as num_trans_entr_pensione,
+count(case when transazioni.id_tipo_trans = 2 and transazioni.importo > 0 then conto.id_cliente end) as num_trans_entr_dividendi,
+count(case when transazioni.id_tipo_trans = 3 and transazioni.importo > 0 then conto.id_cliente end) as num_trans_entr_amazon,
+count(case when transazioni.id_tipo_trans = 4 and transazioni.importo > 0 then conto.id_cliente end) as num_trans_entr_mutuo,
+count(case when transazioni.id_tipo_trans = 5 and transazioni.importo > 0 then conto.id_cliente end) as num_trans_entr_hotel,
+count(case when transazioni.id_tipo_trans = 6 and transazioni.importo > 0 then conto.id_cliente end) as num_trans_entr_voli,
+count(case when transazioni.id_tipo_trans = 7 and transazioni.importo > 0 then conto.id_cliente end) as num_trans_entr_supermercato
 from 
 banca.cliente as cliente
 left join
@@ -227,6 +259,8 @@ select * from banca.num_transazioni_entrata_tipo;
 
 
 -- IMPORTO TRANSATO IN USCITA (IMPORTO < 0) PER TIPOLOGIA (UN INDICATORE PER TIPO)
+drop temporary table if exists banca.importo_uscita_tipo;
+
 create temporary table banca.importo_uscita_tipo as
 select
 cliente.id_cliente,
@@ -249,7 +283,10 @@ group by id_cliente;
 
 select * from banca.importo_uscita_tipo;
 
+
 -- IMPORTO TRANSATO IN ENTRATA (IMPORTO > 0) PER TIPOLOGIA (UN INDICATORE PER TIPO)
+drop temporary table if exists banca.importo_entrata_tipo;
+
 create temporary table banca.importo_entrata_tipo as
 select
 cliente.id_cliente,
@@ -272,7 +309,10 @@ group by id_cliente;
 
 select * from banca.importo_entrata_tipo;
 
--- CREAZIONE TABELLA DENORMALIZZATA
+
+-- CREAZIONE TABELLA DENORMALIZZATA (MANTENENDO LE COLONNE CON ALMENO UN VALORE DIVERSO DA 0)
+drop table if exists banca.tabella_denormalizzata;
+
 create table banca.tabella_denormalizzata (
 select 
 cliente.id_cliente,
@@ -286,14 +326,14 @@ num_conto_privati,
 num_conto_base,
 num_conto_business,
 num_conto_famiglie,
-num_trans_usc_conto_privati,
-num_trans_usc_conto_base,
-num_trans_usc_conto_business,
-num_trans_usc_conto_famiglie,
-num_trans_entr_conto_privati,
-num_trans_entr_conto_base,
-num_trans_entr_conto_business,
-num_trans_entr_conto_famiglie,
+num_trans_usc_amazon,
+num_trans_usc_mutuo,
+num_trans_usc_hotel,
+num_trans_usc_voli,
+num_trans_usc_supermercato,
+num_trans_entr_stipendio,
+num_trans_entr_pensione,
+num_trans_entr_dividendi,
 importo_usc_conto_privati,
 importo_usc_conto_base,
 importo_usc_conto_business,
@@ -340,16 +380,6 @@ on cliente.id_cliente=importo_entrata_tipo.id_cliente
 
 select * from banca.tabella_denormalizzata;
 
-
 select -- numero di righe
 count(id_cliente)
 from banca.tabella_denormalizzata;
-
-
-
-
-
-
-
-
-
