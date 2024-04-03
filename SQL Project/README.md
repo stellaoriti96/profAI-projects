@@ -16,3 +16,5 @@ Numero di transazioni in uscita per tipologia (un indicatore per tipo)
 Numero di transazioni in entrata per tipologia (un indicatore per tipo)
 Importo transato in uscita per tipologia di conto (un indicatore per tipo)
 Importo transato in entrata per tipologia di conto (un indicatore per tipo)
+
+Mantieni nella tabella solamente i campi che hanno almeno un valori diverso da zero.
