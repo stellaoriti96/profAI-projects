@@ -5,7 +5,7 @@ Registrare nuovi prodotti, con nome, quantità, prezzo di vendita e prezzo di ac
 Elencare tutti i prodotti presenti.
 Registrare le vendite effettuate.
 Mostrare i profitti lordi e netti.
-Mostrare un menu di aiuto con tutti i comandi disponibili.
+Mostrare un menù di aiuto con tutti i comandi disponibili.
 
 Il software è testuale, quindi utilizzabile da riga di comando.
 
